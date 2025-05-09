@@ -118,6 +118,11 @@ npm run test
 * All incoming shots animate whether new or replacing old ones
 * `opacity-0 animate-fadeIn` is applied to key-wrapped containers to achieve this
 
+### Downloadable File
+* PDF Shot list table format is available through the `Download Shot List as PDF` button
+* This ensures quick sharability of shotlist created
+* This functionality was done with the `jsPDF` package  
+
 ### AI Flow
 
 * On message submit:
