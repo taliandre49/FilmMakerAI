@@ -6,7 +6,7 @@ import { getFirestore as getAdminFirestore } from 'firebase-admin/firestore';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { config } from 'dotenv';
-import OpenAI from 'openai';
+import {OpenAI} from 'openai';
 import cors from 'cors';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -122,3 +122,5 @@ app.post('/api', async (req, res) => {
 
 
 app.listen(port, '0.0.0.0', () => console.log(`Server running on port ${port}`));
+
+export default app;
