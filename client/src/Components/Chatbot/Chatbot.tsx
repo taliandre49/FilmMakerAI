@@ -21,7 +21,7 @@ function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
             body: JSON.stringify({ text: input }),
         });
     
-      
+        console.log(res.body)
         } catch (err) {
         console.error('Error running fetch post', err);
         } finally {
