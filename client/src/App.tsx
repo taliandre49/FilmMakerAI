@@ -31,7 +31,6 @@ function App() {
   const lastShotRef = useRef<HTMLDivElement | null>(null);
 
 
-  console.log('shots', shots.length, shots)
 
   useEffect(() => {
       const unloadCallback = () => {firebase.app().delete()}
@@ -56,8 +55,7 @@ function App() {
 
   useEffect(() => {
     // When shots are updated, observe the last shot to detect visibility
-    console.log(shots.length)
-    console.log(lastShotRef.current)
+
     if (shots.length > 0 && lastShotRef.current) {
       console.log('shots.length > 0 && lastShotRef.current', lastShotRef.current)
       const observer = new IntersectionObserver(
@@ -162,7 +160,8 @@ function App() {
         margin: { top: 20 },
       });
     
-      doc.save('latest-shot.pdf');
+      // doc.save('latest-shot.pdf');
+      doc.save(`${lastShot.sceneName}.pdf`)
     };
     
 

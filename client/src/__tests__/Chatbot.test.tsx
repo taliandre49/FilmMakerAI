@@ -17,7 +17,7 @@ describe('ChatBox', () => {
     const inputElement = screen.getByPlaceholderText('Ask the AI to modify the shot list...');
     const buttonElement = screen.getByRole('button', { name: /send/i });
 
-    expect(inputElement).toBeInTheDocument(); // Now toBeInTheDocument should work!
+    expect(inputElement).toBeInTheDocument();
     expect(buttonElement).toBeInTheDocument();
   });
 });

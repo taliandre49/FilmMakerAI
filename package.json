@@ -6,7 +6,10 @@
     "test": "dotenv -e server/.env.test -- jest",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npx ts-node index.ts",
-    "client": "cd client && npm run dev"
+    "client": "cd client && npm run dev",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "cd server && tsc",
+    "build:client": "cd client && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +30,7 @@
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "axios": "^1.9.0",
     "jest-environment-jsdom": "^29.7.0",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",

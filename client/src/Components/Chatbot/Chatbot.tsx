@@ -21,8 +21,7 @@ function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
             body: JSON.stringify({ text: input }),
         });
     
-        const data = await res.json();
-        console.log(data)
+      
         } catch (err) {
         console.error('Error running fetch post', err);
         } finally {
@@ -37,7 +36,7 @@ function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
                 onDataRendered();  // parent will call this
                 setLoading(false);
                 setInput('');
-            }, 10000); // fallback in case parent never calls it
+            }, 10000); // fallback in case parent never calls it 10 seconds time limit!
             return () => clearTimeout(timeout);
             }
         }, [loading]);
@@ -66,6 +65,7 @@ function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
             </button>
         </div>
         
+        {/* conditionally display components based on if current query is in process or not! */}
         {loading && (
             <div className="text-lg text-gray-500 animate-pulse">
             The AI is thinking... ⏳

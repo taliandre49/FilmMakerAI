@@ -1,3 +1,4 @@
+import 'openai/shims/node'
 import express from 'express';
 import path from 'path';
 import {collection, addDoc } from "firebase/firestore";
@@ -9,6 +10,7 @@ import { config } from 'dotenv';
 import {OpenAI} from 'openai';
 import cors from 'cors';
 import { doc, setDoc } from 'firebase/firestore';
+
 
 
 let conversation: { role: 'user' | 'assistant'; content: string }[] = [];
@@ -108,11 +110,19 @@ app.post('/api', async (req, res) => {
     /*
       The following Code takes the disected data JSON received from the AI and adds/modifes the firebase Database accordingly
     */
-    await setDoc(doc(db, "shotlists", "current"), {
+    // await setDoc(doc(db, "shotlists", "current"), {
+    //     shots,
+    //     explanation,
+    //     timestamp: Date.now()
+    //   });
+    if (process.env.NODE_ENV !== 'test') {
+      await setDoc(doc(db, "shotlists", "current"), {
         shots,
         explanation,
         timestamp: Date.now()
       });
+    }
+    
 
   } catch (err) {
     console.error(err);
@@ -121,6 +131,8 @@ app.post('/api', async (req, res) => {
 });
 
 
-app.listen(port, '0.0.0.0', () => console.log(`Server running on port ${port}`));
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, '0.0.0.0', () => console.log(`Server running on port ${port}`));
+}
 
 export default app;
