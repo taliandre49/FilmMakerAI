@@ -51,6 +51,7 @@ function ChatBox({dataRendered, onDataRendered}:{ dataRendered: boolean; onDataR
             }
         } finally {
             setLoading(false);
+            console.log(error)
        
     }
     
