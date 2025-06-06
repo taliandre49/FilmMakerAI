@@ -36,9 +36,10 @@ function App() {
       const unloadCallback = () => {firebase.app().delete()}
       window.addEventListener("beforeunload", unloadCallback);
       return () =>{
-        async () => {
+        // async () => {
         window.removeEventListener("beforeunload", unloadCallback);
-      }}
+      // }}
+      }
     }, [])
     
 
@@ -54,22 +55,24 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // When shots are updated, observe the last shot to detect visibility
 
+    // When shots are updated, observe the last shot to detect visibility
     if (shots.length > 0 && lastShotRef.current) {
       console.log('shots.length > 0 && lastShotRef.current', lastShotRef.current)
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             console.log('last shot is visible')
+            console.log('before', dataRendered)
             setDataRendered(true); // Set loading to false once the last shot data is visible
+            console.log('after', dataRendered)
           }
         },
         { threshold: 1.0 }
       );
 
       observer.observe(lastShotRef.current);
-
+      
       return () => observer.disconnect();
     }
   }, [shots]);
@@ -175,7 +178,7 @@ function App() {
       {shots.length > 0 ? (
         <div key = {JSON.stringify(shots)}className="mb-6 space-y-4 transition-opacity duration-700 opacity-0 animate-fadeIn">
           {shots.map((shot,index) => (
-          <div key={`${shot.id}-${Math.random()}`} className="border p-4 mb-4 rounded bg-white shadow" ref={index === shots.length - 1 ? lastShotRef : null}>
+          <div key={`${shot.id}`} className="border p-4 mb-4 rounded bg-white shadow" ref={index === shots.length - 1 ? lastShotRef : null}>
             <h2 className="font-bold text-lg">{shot.sceneName}</h2>
             <p><strong>Description:</strong> {shot.description}</p>
             <div className="grid grid-cols-2 gap-x-4 text-sm mt-2">
@@ -213,7 +216,8 @@ function App() {
         Download Shot List as PDF
       </button>
       }
-      <ChatBox  onDataRendered={() => {
+      <ChatBox    dataRendered={dataRendered}
+      onDataRendered={() => {
         if (dataRendered) {
           setDataRendered(false); // reset signal
         }

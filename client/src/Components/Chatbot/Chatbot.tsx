@@ -1,14 +1,26 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useRef} from 'react';
 
 
-function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
+function ChatBox({dataRendered, onDataRendered}:{ dataRendered: boolean; onDataRendered: () => void}) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const sendMessage = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!input.trim()) return;
     
         setLoading(true);
+        setError(null); // clear previous errors
+
+
+        // Start timeout timer
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+        setLoading(false);
+        setError('Request timed out. Please try again.');
+        }, 20000); // 20 seconds timeout
     
         try {
         /*
@@ -20,27 +32,40 @@ function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: input }),
         });
-    
+        
         console.log(res.body)
+        
+        // If response is OK before timeout, clear timeout timer
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+
         } catch (err) {
-        console.error('Error running fetch post', err);
+            console.error('Error running fetch post', err);
+            setError('Network error occurred. Please try again.');
+            setLoading(false);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+              timeoutRef.current = null;
+            }
         } finally {
             setLoading(false);
        
     }
     
   };
-        useEffect(() => {
-            if (loading ) {
-            const timeout = setTimeout(() => {
-                onDataRendered();  // parent will call this
-                setLoading(false);
-                setInput('');
-            }, 10000); // fallback in case parent never calls it 10 seconds time limit!
-            return () => clearTimeout(timeout);
-            }
-        }, [loading]);
 
+        // This code ensures that the loading state is tied to the pointer specifed in App.tsx to remove loading state once information is displayed
+        //This enables a new  request aswell!
+        useEffect(() => {
+            if (dataRendered) {
+              // The parent told us last shot is visible!
+              setLoading(false);
+              setInput('');
+              onDataRendered(); // notify parent that we've handled the event
+            }
+          }, [dataRendered, onDataRendered]);
   return (
     <div className="flex flex-col gap-2">
 
@@ -58,7 +83,7 @@ function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
             />
             <button
                 onClick={(e) => sendMessage(e)}
-                className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 hover:cursor-pointer hover:bg-sky-700  z-100"
+                className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 hover:cursor-pointer hover:bg-sky-700  z-100 focus-visible:ring-2 focus-visible:ring-blue-500"
                 disabled={loading}
             >
                 {loading ? 'Running...' : 'Send'}
@@ -71,6 +96,7 @@ function ChatBox({onDataRendered}:{onDataRendered: () => void}) {
             The AI is thinking... ⏳
             </div>
         )}
+        
     </div>
   );
 }

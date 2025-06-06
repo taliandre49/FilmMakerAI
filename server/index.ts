@@ -109,12 +109,9 @@ app.post('/api', async (req, res) => {
 
     /*
       The following Code takes the disected data JSON received from the AI and adds/modifes the firebase Database accordingly
+        - note the conditional is for running productions example if you are runnig for testing this should not run!
     */
-    // await setDoc(doc(db, "shotlists", "current"), {
-    //     shots,
-    //     explanation,
-    //     timestamp: Date.now()
-    //   });
+
     if (process.env.NODE_ENV !== 'test') {
       await setDoc(doc(db, "shotlists", "current"), {
         shots,

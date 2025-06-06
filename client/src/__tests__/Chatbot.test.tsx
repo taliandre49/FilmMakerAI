@@ -12,7 +12,7 @@ import '@testing-library/jest-dom';
 
 describe('ChatBox', () => {
   it('should render the chatbot input and button', () => {
-    render(<ChatBox onDataRendered={() => {}} />);
+    render(<ChatBox   dataRendered={false} onDataRendered={() => {}} />);
 
     const inputElement = screen.getByPlaceholderText('Ask the AI to modify the shot list...');
     const buttonElement = screen.getByRole('button', { name: /send/i });
