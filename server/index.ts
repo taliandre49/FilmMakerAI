@@ -127,6 +127,9 @@ app.post('/api', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('🎬 FilmShot AI server is up and running!');
+});
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, '0.0.0.0', () => console.log(`Server running on port ${port}`));
