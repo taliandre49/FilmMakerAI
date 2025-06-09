@@ -15,7 +15,8 @@
     "express": "^5.1.0",
     "firebase": "^11.7.0",
     "firebase-admin": "^13.3.0",
-    "openai": "^4.97.0"
+    "openai": "^4.97.0",
+    "vercel": "^42.3.0"
   },
   "type": "module"
 }
