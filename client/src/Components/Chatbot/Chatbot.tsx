@@ -7,6 +7,11 @@ function ChatBox({dataRendered, onDataRendered}:{ dataRendered: boolean; onDataR
   const [error, setError] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    const isDev = window.location.hostname === 'localhost';
+    const apiUrl = isDev
+    ? 'http://localhost:8080/api'
+    : 'https://fillmshotai-server.vercel.app/api';
+
   const sendMessage = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (!input.trim()) return;
@@ -27,7 +32,7 @@ function ChatBox({dataRendered, onDataRendered}:{ dataRendered: boolean; onDataR
             This fetch function connects to our backend entry point inorder to run
             the backend logic of connecting to OpenAI and storing data in a databse.
         */
-        const res = await fetch('http://localhost:8080/api', {
+        const res = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: input }),
